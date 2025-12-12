@@ -81,7 +81,7 @@ def ask_question(q: str, k: int = 4) -> Dict[str, Any]:
     if not VECTOR_DBS:
         raise ValueError("No pipelines are built yet. Upload a PDF first.")
 
-    openai_key = os.getenv("OPENAI_API_KEY")
+    openai_key = os.getenv("OPENAI_KEY")
     use_llm = bool(openai_key)
 
     llm = None
@@ -109,16 +109,16 @@ def ask_question(q: str, k: int = 4) -> Dict[str, Any]:
 
       
         prompt = f"""
-Answer the user's question
-USING ONLY the context below. If the answer is not in the context,
-say you don't know.
+        Answer the user's question
+        USING ONLY the context below. If the answer is not in the context,
+        say you don't know.
 
-PIPELINE: {name}
-CONTEXT:
-{context_text}
+        PIPELINE: {name}
+        CONTEXT:
+        {context_text}
 
-QUESTION: {q}
-"""
+        QUESTION: {q}
+        """
 
         resp = llm.invoke(prompt)
 
