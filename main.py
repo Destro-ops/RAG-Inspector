@@ -41,6 +41,32 @@ async def upload(file: UploadFile = File(...)):
             f.write(await file.read())
     except Exception as e:
         raise HTTPException (status_code=500, detail = f"failed to save file:{e}")
+    
+    try:
+        load_and_store(file_path)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error Message: {e}")
+    
+    return {"status": "ok", "detail": f"Indexed {file.filename}"}
+
+@app.post("/ask")
+async def ask(question: str = Form(...), K: Optional[int] = Form(4)):
+    if not question or question.strip() == "":
+        raise HTTPException (status_code=400, detail="the question cannot be empty")
+
+    try:
+        results = ask_question(q = question, k=K)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"ask_question failed {e}")
+    except ValueError as e:
+        raise HTTPException(status_code=400,detail=f"{e}")
+
+    return results
+
+ 
+
+    
 
     
 
