@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
-from rag import load_and_store, ask_question, VECTOR_DBS, PIPELINE_META
+from app.rag import load_and_store, ask_question, VECTOR_DBS, PIPELINE_META
 
 app = FastAPI(title="Rag quality checker backend")
 
@@ -14,7 +14,10 @@ app.add_middleware(
     allow_headers = ["*"],
 )
 
-DATA_DIR = "uploads"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data", "uploads")
+
 os.makedirs(DATA_DIR, exist_ok=True)
 
 
