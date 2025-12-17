@@ -81,7 +81,7 @@ def ask_question(q: str, k: int = 4) -> Dict[str, Any]:
     if not VECTOR_DBS:
         raise ValueError("No pipelines are built yet. Upload a PDF first.")
 
-    openai_key = os.getenv("OPENAI_KEY")
+    openai_key = os.getenv("OPENAI_API_KEY")
     use_llm = bool(openai_key)
 
     llm = None

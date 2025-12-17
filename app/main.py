@@ -3,6 +3,10 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from app.rag import load_and_store, ask_question, VECTOR_DBS, PIPELINE_META
+from app.evaluator import evaluate_answers
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="Rag quality checker backend")
 
@@ -66,6 +70,21 @@ async def ask(question: str = Form(...), K: Optional[int] = Form(4)):
         raise HTTPException(status_code=400,detail=f"{e}")
 
     return results
+
+@app.post("/evaluate")
+async def evaluate(question: str = Form(...), k: int = Form(4)):
+    rag_results = ask_question(question, k)
+    pipelines = rag_results['pipelines']
+
+    evaluation = evaluate_answers(question, pipeline_answers=pipelines)
+
+    return{
+        "question": question,
+        "evaluation": evaluation,
+        "pipelines": pipelines
+    }
+
+
 
  
 
