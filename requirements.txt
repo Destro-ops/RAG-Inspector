@@ -1,0 +1,17 @@
+typing
+fastapi
+uvicorn
+python-dotenv
+
+langchain
+langchain-community
+langchain-openai
+langchain-ollama
+langchain-textsplitters
+
+faiss-cpu
+sentence-transformers
+pypdf
+
+streamlit
+requests
