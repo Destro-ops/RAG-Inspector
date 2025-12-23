@@ -5,8 +5,8 @@ python-dotenv
 
 langchain
 langchain-community
-langchain-openai
-langchain-ollama
+langchain-openai or langchain-ollama
+
 langchain-textsplitters
 
 faiss-cpu

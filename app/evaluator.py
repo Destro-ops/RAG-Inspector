@@ -1,5 +1,6 @@
 from typing import Dict, Any
 from langchain_openai import ChatOpenAI 
+import json
 
 
 def evaluate_answers(question: str, pipeline_answers:Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
@@ -8,7 +9,7 @@ def evaluate_answers(question: str, pipeline_answers:Dict[str, Dict[str, Any]]) 
     answers_text = ""
     for name, data in pipeline_answers.items():
         answers_text += f"""
-        PIPEINE:{name}
+        PIPELINE:{name}
         ANSWERS:{data['answer']}
 
         CONTEXT USED:{" ".join(data['contexts'])}
@@ -55,7 +56,48 @@ def evaluate_answers(question: str, pipeline_answers:Dict[str, Dict[str, Any]]) 
 
     response = llm.invoke(prompt)
 
-    return response.content
+    
+
+    import json
+    import re
+
+    raw = response.content.strip()
+
+# Try direct JSON parse first
+    try:
+      parsed = json.loads(raw)
+    except json.JSONDecodeError:
+    # Try to extract JSON from text
+      match = re.search(r"\{.*\}", raw, re.DOTALL)
+    if not match:
+        return {
+            "error": "Evaluator returned no JSON",
+            "raw_output": raw
+        }
+
+    try:
+        parsed = json.loads(match.group())
+    except Exception:
+        return {
+            "error": "Evaluator JSON could not be parsed",
+            "raw_output": raw
+        }
+
+# Validate schema
+    required = {"scores", "best_pipeline", "reason"}
+    if not required.issubset(parsed.keys()):
+      return {
+        "error": "Evaluator JSON missing required keys",
+        "raw_output": parsed
+    }
+
+    return parsed
+
+
+
+
+
+
          
 
 
