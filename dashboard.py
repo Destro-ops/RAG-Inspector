@@ -6,7 +6,7 @@ BACKEND_URL = "http://127.0.0.1:8000"
 st.set_page_config(page_title="RAG Quality Checker", layout="wide")
 st.title("📊 RAG Quality Checker")
 
-# ---------------- Session State ----------------
+# ----for name, info in st.session_state.pipeline_answers.items():------------ Session State ----------------
 if "pipeline_answers" not in st.session_state:
     st.session_state.pipeline_answers = None
 
@@ -64,6 +64,14 @@ if st.session_state.pipeline_answers:
         with st.expander(name):
             st.markdown("**Answer:**")
             st.write(info["answer"])
+        
+        st.markdown("**📌 Sources used:**")
+
+        for ctx in info["contexts"]:
+           st.markdown(
+            f"- 📘 **{ctx['pdf_title']}**, Page **{ctx['page']}**"
+           )
+
 
 
 # ---------------- Compare Pipelines ----------------

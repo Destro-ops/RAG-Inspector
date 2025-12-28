@@ -97,14 +97,21 @@ def ask_question(q: str, k: int = 4) -> Dict[str, Any]:
 
         
         retrieved_docs = db.similarity_search(q, k=k)
-        contexts = [d.page_content for d in retrieved_docs]
-        context_text = "\n\n---\n\n".join(contexts)
+        
+        contexts = []
+
+        for d in retrieved_docs:
+            contexts.append({
+                "text":d.page_content,
+                "page":d.metadata.get('page'),
+                "pdf_title":os.path.basename(d.metadata.get("source", "")),
+            })
 
        
         if not use_llm:
             pipeline_results[name] = {
                 "config": cfg,
-                "answer": context_text,
+                
                 "contexts": contexts,
             }
             continue
@@ -117,7 +124,7 @@ def ask_question(q: str, k: int = 4) -> Dict[str, Any]:
 
         PIPELINE: {name}
         CONTEXT:
-        {context_text}
+        {contexts}
 
         QUESTION: {q}
         """
