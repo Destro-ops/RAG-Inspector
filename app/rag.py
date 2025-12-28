@@ -2,11 +2,13 @@ import os
 from typing import Dict, Any
 
 from dotenv import load_dotenv
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_openai import ChatOpenAI
+
 
 
 load_dotenv()
@@ -36,7 +38,7 @@ PIPELINE_CONFIGS: Dict[str, Dict[str, Any]] = {
 }
 
 VECTOR_DBS: Dict[str, FAISS] = {}
-# (Optional) keep configs with each db for easy return
+
 PIPELINE_META: Dict[str, Dict[str, Any]] = {}
 
 
