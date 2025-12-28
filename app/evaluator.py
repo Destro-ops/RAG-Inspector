@@ -12,7 +12,7 @@ def evaluate_answers(question: str, pipeline_answers:Dict[str, Dict[str, Any]]) 
         PIPELINE:{name}
         ANSWERS:{data['answer']}
 
-        CONTEXT USED:{" ".join(data['contexts'])}
+        CONTEXT USED:{(data['contexts'])}
         """
         
 
